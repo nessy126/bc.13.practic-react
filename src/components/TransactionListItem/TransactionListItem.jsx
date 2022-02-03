@@ -13,7 +13,7 @@ class TransactionListItem extends Component {
         <p>time</p>
         <p>amount</p>
         <p>currency</p>
-        <button onClick={this.switchMenu} type="">
+        <button onClick={this.switchMenu} type="button">
           ...
         </button>
         {this.state.isOpenMenu && (
