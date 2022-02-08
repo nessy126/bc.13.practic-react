@@ -6,18 +6,32 @@ import TransactionListPage from "./components/TransactionListPage/TransactionLis
 class App extends Component {
   state = {
     activePage: "main", //main || incomes || costs
-    transactions: [],
+    costs: [],
+    incomes: []
   }
 
   changePage = (activePage) => this.setState({ activePage, })
 
   addTransaction = (newTransaction) => {
-    this.setState(({ transactions }) => ({
-      transactions: [...transactions, newTransaction],
+    const transType = newTransaction.transType
+    this.setState((prev) => ({
+      [transType]: [...prev[transType], newTransaction],
     }))
   }
+  // componentDidMount() {
+  //   const transactions = JSON.parse(localStorage.getItem("transactions"))  || []
+  //   this.setState({ transactions})
+  // }
+
+  // componentDidUpdate(prevProps, prevState) {
+  //   if ( prevState.transactions !==  this.state.transactions) {
+  //       localStorage.setItem('transactions',  JSON.stringify(this.state.transactions))
+  //     }
+  //   }
+
 
   render() {
+
     return (
       <div>
         <h1>React Practic</h1>
@@ -31,12 +45,14 @@ class App extends Component {
           <TransactionListPage
             changePage={this.changePage}
             transType={"incomes"}
+            transactions={this.state.incomes}
           />
         )}
         {this.state.activePage === "costs" && (
           <TransactionListPage
             changePage={this.changePage}
             transType={"costs"}
+            transactions={this.state.costs}
           />
         )}
       </div>

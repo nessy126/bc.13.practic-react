@@ -1,6 +1,6 @@
-import { nanoid } from "nanoid";
 import { Component } from "react"
 import CategoryList from "../CategoryList/CategoryList";
+import {postTransaction} from "../../services/api"
 
 class TransactionForm extends Component {
   state = {
@@ -14,6 +14,7 @@ class TransactionForm extends Component {
       { id: 1, title: "Еда" },
       { id: 2, title: "Напитки" },
     ],
+    transType: "costs",
   }
 
   handleChange = (e) => {
@@ -23,9 +24,10 @@ class TransactionForm extends Component {
 
   handleSubmitTransaction = (e) => {
     e.preventDefault()
-    const {categoriesList, ...dataForm} = this.state
-    dataForm.id = nanoid()
-    this.props.addTransaction(dataForm)
+    const { categoriesList, ...transaction } = this.state
+    postTransaction({ transType: transaction.transType, transaction }).then(data => {
+      this.props.addTransaction(data )
+    })
     this.reset()
     console.log("ok")
   }
@@ -55,8 +57,6 @@ class TransactionForm extends Component {
         acc[el] = ""
       return acc
     }, {})
-    // this.setState({ :  });
-    console.log(resetedState)
   }
 
   render() {
@@ -68,11 +68,14 @@ class TransactionForm extends Component {
       <>
         {!isOpenCategories ? (
           <>
-            <select name="transactionType" id="">
-              <option value="incomes" name="">
+            <select name="transactionType"
+              value={this.state.transType}
+              onChange={this.handleChange}
+            >
+              <option value="incomes">
                 Доходы
               </option>
-              <option value="spends" name="">
+              <option value="costs" >
                 Расходы
               </option>
             </select>
