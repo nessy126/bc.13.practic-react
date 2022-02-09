@@ -1,6 +1,6 @@
 import { Component } from "react"
 import CategoryList from "../CategoryList/CategoryList";
-import {postTransaction} from "../../services/api"
+import {postTransactionAPI} from "../../services/api"
 
 class TransactionForm extends Component {
   state = {
@@ -25,7 +25,7 @@ class TransactionForm extends Component {
   handleSubmitTransaction = (e) => {
     e.preventDefault()
     const { categoriesList, ...transaction } = this.state
-    postTransaction({ transType: transaction.transType, transaction }).then(data => {
+    postTransactionAPI({ transType: transaction.transType, transaction }).then(data => {
       this.props.addTransaction(data )
     })
     this.reset()
