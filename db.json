@@ -16,6 +16,79 @@
   "profile": {
     "name": "typicode"
   },
-  "costs": [],
-  "incomes": []
+  "costs": [
+    {
+      "date": "2022-02-11",
+      "time": "16:26",
+      "category": "Еда",
+      "sum": "1200",
+      "curency": "UAH",
+      "comment": "п",
+      "transType": "costs",
+      "id": 1
+    },
+    {
+      "date": "2022-02-11",
+      "time": "16:26",
+      "category": "Еда",
+      "sum": "1200",
+      "curency": "UAH",
+      "comment": "п",
+      "transType": "costs",
+      "transactionType": "incomes",
+      "id": 2
+    },
+    {
+      "date": "2022-02-22",
+      "time": "",
+      "category": "Еда",
+      "sum": "",
+      "curency": "UAH",
+      "comment": "",
+      "transType": "costs",
+      "id": 3
+    }
+  ],
+  "incomes": [
+    {
+      "date": "",
+      "time": "",
+      "category": "Еда",
+      "sum": "",
+      "curency": "UAH",
+      "comment": "",
+      "transType": "incomes",
+      "id": 1
+    },
+    {
+      "date": "",
+      "time": "",
+      "category": "Еда",
+      "sum": "",
+      "curency": "UAH",
+      "comment": "",
+      "transType": "incomes",
+      "id": 2
+    },
+    {
+      "date": "2022-02-22",
+      "time": "17:24",
+      "category": "Еда",
+      "sum": "1200",
+      "curency": "UAH",
+      "comment": "п",
+      "transType": "incomes",
+      "id": 3
+    },
+    {
+      "date": "2022-02-22",
+      "time": "",
+      "category": "Еда",
+      "sum": "",
+      "curency": "UAH",
+      "comment": "",
+      "transType": "incomes",
+      "id": 4
+    }
+  ]
 }

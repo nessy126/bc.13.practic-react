@@ -1,41 +1,79 @@
-import { Component } from "react";
+import { Component, useState, useEffect } from "react";
 import MainPage from "./components/MainPage/MainPage";
 import TransactionListPage from "./components/TransactionListPage/TransactionListPage";
 // import TransactionForm from "./components/TransactionForm/TransactionForm"
 import { getTransactionAPI, deleteTransactionAPI } from "./services/api"
 
-class App extends Component {
-  state = {
-    activePage: "main", //main || incomes || costs
-    costs: [],
-    incomes: []
+const App = () => {
+
+  const [activePage, setActivePage] = useState("main");
+  const [costs, setCosts ] = useState([])
+  const [incomes, setIncomes] = useState([])
+  
+  const changePage = (activePage) => {
+    setActivePage(activePage)
   }
 
-  changePage = (activePage) => this.setState({ activePage, })
-
-  addTransaction = (newTransaction) => {
+  const addTransaction = (newTransaction) => {
     const transType = newTransaction.transType
-    this.setState((prev) => ({
-      [transType]: [...prev[transType], newTransaction],
-    }))
+
+    transType === "costs" && setCosts(prev => [...prev, newTransaction])
+
+    if (transType === "incomes") {
+      setIncomes(prev => [...prev, newTransaction])
+    }
   }
 
-  deleteTransaction = ({id, transType}) => {
-    deleteTransactionAPI({ id, transType }).then((res) =>
-      this.setState((prev) => ({
-        [transType]: prev[transType].filter((el) => el.id !== id),
-      }))
+  const deleteTransaction = ({id, transType}) => {
+    deleteTransactionAPI({ id, transType }).then((res) => {
+      transType === "costs" && setCosts(prev => prev.filter(el => el.id !== id));
+      transType === "incomes" && setIncomes(prev => prev.filter(el => el.id !== id))
+    }
     )
   }
-  componentDidMount() {
+
+
+  
+  useEffect(() => {
     getTransactionAPI("costs")
-      .then((costs) => this.setState({ costs }))
-      .catch((err) => console.log(err))
+      .then((costs) => setCosts(costs))
+      .catch((err) => console.log(err));
     getTransactionAPI("incomes")
-      .then((incomes) => this.setState({ incomes }))
-      .catch(err => console.log(err))
-    
-  }
+      .then((incomes) => setIncomes(incomes))
+      .catch((err) => console.log(err))
+  }, [])
+
+  return (
+      <div>
+        <h1>React Practic</h1>
+        {activePage === "main" && (
+          <MainPage
+            changePage={changePage}
+            addTransaction={addTransaction}
+          />
+        )}
+        {activePage === "incomes" && (
+          <TransactionListPage
+            changePage={changePage}
+            transType={"incomes"}
+            transactions={incomes}
+            deleteTransaction={deleteTransaction}
+          />
+        )}
+        {activePage === "costs" && (
+          <TransactionListPage
+            changePage={changePage}
+            transType={"costs"}
+            transactions={costs}
+            deleteTransaction={deleteTransaction}
+          />
+        )}
+      </div>
+    )
+}
+
+ 
+  
 
   // componentDidUpdate(prevProps, prevState) {
   //   if ( prevState.transactions !==  this.state.transactions) {
@@ -44,36 +82,5 @@ class App extends Component {
   //   }
 
 
-  render() {
-
-    return (
-      <div>
-        <h1>React Practic</h1>
-        {this.state.activePage === "main" && (
-          <MainPage
-            changePage={this.changePage}
-            addTransaction={this.addTransaction}
-          />
-        )}
-        {this.state.activePage === "incomes" && (
-          <TransactionListPage
-            changePage={this.changePage}
-            transType={"incomes"}
-            transactions={this.state.incomes}
-            deleteTransaction={this.deleteTransaction}
-          />
-        )}
-        {this.state.activePage === "costs" && (
-          <TransactionListPage
-            changePage={this.changePage}
-            transType={"costs"}
-            transactions={this.state.costs}
-            deleteTransaction={this.deleteTransaction}
-          />
-        )}
-      </div>
-    )
-  }
-}
 
 export default App;

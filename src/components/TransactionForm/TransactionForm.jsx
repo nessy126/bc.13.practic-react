@@ -1,88 +1,73 @@
-import { Component } from "react"
+import { useState } from "react"
 import CategoryList from "../CategoryList/CategoryList";
-import {postTransactionAPI} from "../../services/api"
+import { postTransactionAPI } from "../../services/api"
 
-class TransactionForm extends Component {
-  state = {
-    date: "",
-    time: "",
-    category: "Еда",
-    sum: "",
-    curency: "UAH",
-    comment: "",
-    categoriesList: [
+const initialForm = {
+  date: "2022-02-22",
+  time: "",
+  category: "Еда",
+  sum: "",
+  curency: "UAH",
+  comment: "",
+}
+
+const initialCategoriesList = [
       { id: 1, title: "Еда" },
       { id: 2, title: "Напитки" },
-    ],
-    transType: "costs",
-  }
+    ]
 
-  handleChange = (e) => {
+const TransactionForm = ({ isOpenCategories, toggleOpenCategoryList, addTransaction }) => {
+  const [form, setForm] = useState(initialForm);
+  const [categoriesList, setCategoriesList] = useState(initialCategoriesList);
+  const [transType, setTransType] = useState("costs")
+
+
+  const handleChangeForm = (e) => {
     const { name, value } = e.target
-    this.setState({ [name]: value })
+    setForm((prev) => ({ ...prev, [name]: value }))
   }
 
-  handleSubmitTransaction = (e) => {
+  const handleChangeTransTypre = (e) => {
+        const { value } = e.target
+    setTransType(value)
+   }
+
+  const handleSubmitTransaction = (e) => {
     e.preventDefault()
-    const { categoriesList, ...transaction } = this.state
-    postTransactionAPI({ transType: transaction.transType, transaction }).then(data => {
-      this.props.addTransaction(data )
+    postTransactionAPI({ transType, transaction: {...form, transType}}).then(data => {
+      addTransaction(data)
     })
-    this.reset()
-    console.log("ok")
+       setForm(initialForm)
   }
 
-  addCategory = (data) => {
-    this.setState((prev) => ({
-      categoriesList: [...prev.categoriesList, data],
-    }))
+  const addCategory = (data) => {
+    setCategoriesList((prev) => [...prev, data])
   }
 
-  setCategory = (category) => {
-    this.setState({ category: category })
-    this.props.toggleOpenCategoryList()
+  const setCategory = (category) => {
+    setForm((prev) => ({...prev, category: category}))
+    toggleOpenCategoryList()
   }
 
-  reset = () => {
-    const resetedState = Object.keys(this.state).reduce((acc, el) => {
-      if (el === 'categoriesList') return acc;
-      if (el === "category") {
-        (acc[el] = "Еда")
-        return acc
-      }
-      if (el === "date") {
-        acc[el] = "2022-02-05";
-        return acc
-      }
-        acc[el] = ""
-      return acc
-    }, {})
-  }
 
-  render() {
-    const { date, time, category, sum, curency, comment, categoriesList } =
-      this.state
-    const { isOpenCategories, toggleOpenCategoryList, addTransaction } =
-      this.props
+
+    const { date, time, category, sum, curency, comment } = form
     return (
       <>
         {!isOpenCategories ? (
           <>
-            <select name="transactionType"
-              value={this.state.transType}
-              onChange={this.handleChange}
+            <select
+              name="transType"
+              value={transType}
+              onChange={handleChangeTransTypre}
             >
-              <option value="incomes">
-                Доходы
-              </option>
-              <option value="costs" >
-                Расходы
-              </option>
+              <option value="incomes">Доходы</option>
+              <option value="costs">Расходы</option>
             </select>
-            <form onSubmit={this.handleSubmitTransaction} action="">
+            <form onSubmit={handleSubmitTransaction} action="">
               <label>
                 <input
-                  onChange={this.handleChange}
+                  onChange={handleChangeForm}
                   type="date"
                   name="date"
                   value={date}
@@ -90,7 +75,7 @@ class TransactionForm extends Component {
               </label>
               <label>
                 <input
-                  onChange={this.handleChange}
+                  onChange={handleChangeForm}
                   type="time"
                   name="time"
                   value={time}
@@ -109,7 +94,7 @@ class TransactionForm extends Component {
               <label>
                 Сумма
                 <input
-                  onChange={this.handleChange}
+                  onChange={handleChangeForm}
                   type="text"
                   placeholder="Введите сумму"
                   name="sum"
@@ -119,7 +104,7 @@ class TransactionForm extends Component {
               <label>
                 Валюта
                 <input
-                  onChange={this.handleChange}
+                  onChange={handleChangeForm}
                   type="button"
                   name="curency"
                   value={curency}
@@ -127,7 +112,7 @@ class TransactionForm extends Component {
               </label>
               <label>
                 <input
-                  onChange={this.handleChange}
+                  onChange={handleChangeForm}
                   type="text"
                   placeholder="Комментарий"
                   name="comment"
@@ -141,13 +126,12 @@ class TransactionForm extends Component {
           <CategoryList
             categoriesList={categoriesList}
             toggleOpenCategoryList={toggleOpenCategoryList}
-            addCategory={this.addCategory}
-            setCategory={this.setCategory}
+            addCategory={addCategory}
+            setCategory={setCategory}
           />
         )}
       </>
     )
   }
-}
 
 export default TransactionForm
