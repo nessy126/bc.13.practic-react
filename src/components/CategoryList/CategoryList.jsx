@@ -1,44 +1,41 @@
-import { Component } from "react"
-import { nanoid } from 'nanoid'
-
+import React, { Component } from "react";
+import { nanoid } from "nanoid";
+import { Link } from "react-router-dom";
 
 class CategoryList extends Component {
-  state = {
-    inputCategory: "",
-  }
+  state = { inputCategory: "" };
 
   handleInputChange = (e) => {
-    const { value } = e.target
-    this.setState({ inputCategory: value })
-  }
+    const { value } = e.target;
+    this.setState({ inputCategory: value });
+  };
 
-  handleSubmitCategoty = (e) => {
+  handleSubmitNewCategory = (e) => {
     e.preventDefault();
     const newCategory = {
       title: this.state.inputCategory,
       id: nanoid(),
-    }
-   
-    this.props.addCategory(newCategory)
-    this.reset()
-  }
+    };
+    this.props.addCategory(newCategory);
+    this.reset();
+  };
+
   reset = () => {
-    this.setState({inputCategory: ''})
-  }
+    this.setState({ inputCategory: "" });
+  };
 
   render() {
-    const { categoriesList, toggleOpenCategoryList, setCategory } = this.props
+    const { categoriesList, togleCategoryList, setCategory } = this.props;
     return (
       <>
-        <button onClick={toggleOpenCategoryList} type="button">
-          Назад
-        </button>
-        <h2>Категории</h2>
+        <Link className="link" to={"/"}>
+          Back
+        </Link>
         <ul>
           {categoriesList.map((el) => (
             <li key={el.id}>
               <p onClick={() => setCategory(el.title)}>{el.title}</p>
-              <button type="button">...</button>
+              <button>...</button>
               {/* <div>
                 <button>Delete</button>
                 <button>Edit</button>
@@ -46,18 +43,18 @@ class CategoryList extends Component {
             </li>
           ))}
         </ul>
-        <form action="" onSubmit={this.handleSubmitCategoty}>
+        <form onSubmit={this.handleSubmitNewCategory}>
           <input
-            onChange={this.handleInputChange}
             type="text"
-            placeholder="Создать категорию"
+            placeholder="new category"
             value={this.state.inputCategory}
+            onChange={this.handleInputChange}
           />
           <button type="submit">+</button>
         </form>
       </>
-    )
+    );
   }
 }
 
-export default CategoryList
+export default CategoryList;

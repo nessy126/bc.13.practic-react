@@ -1,17 +1,19 @@
+import { useTransactionsContext } from "../../context/TransactionsProvider/TransactionsProvider";
 import TransactionListItem from "../TransactionListItem/TransactionListItem";
 
-const TransactionList = ({ transactions, deleteTransaction }) => {
+const TransactionList = ({ transType, switchEditForm }) => {
+  const { [transType]: transactions } = useTransactionsContext();
   return (
     <ul>
       {transactions.map((transaction) => (
         <TransactionListItem
-          {...transaction}
+          transaction={transaction}
           key={transaction.id}
-          deleteTransaction={deleteTransaction}
+          switchEditForm={switchEditForm}
         />
       ))}
     </ul>
-  )
-}
- 
+  );
+};
+
 export default TransactionList;

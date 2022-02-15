@@ -1,45 +1,48 @@
-import { Component } from "react";
+import { useState } from "react";
+import { useTransactionsContext } from "../../context/TransactionsProvider/TransactionsProvider";
 
-class TransactionListItem extends Component {
-  state = {
-    isOpenMenu: false,
-  }
+const TransactionListItem = ({ transaction,switchEditForm }) => {
+  const { delTransaction } = useTransactionsContext();
 
-  switchMenu = () => this.setState((prevState) => ({ isOpenMenu: !prevState.isOpenMenu }))
-  render() {
-    const {
-      comment,
-      curency,
-      date,
-      sum,
-      time,
-      id,
-      deleteTransaction,
-      transType,
-    } = this.props
-    return (
-      <li>
-        <p>{date}</p>
-        <p>{time}</p>
-        <p>{sum}</p>
-        <p>{curency}</p>
-        <p>{comment}</p>
-        <button onClick={this.switchMenu} type="button">
-          ...
-        </button>
-        {this.state.isOpenMenu && (
-          <div>
-            <button type="button" onClick={() => deleteTransaction({id, transType})}>
-              Delete
-            </button>
-            <button type="button" onClick={null}>
-              Edit
-            </button>
-          </div>
-        )}
-      </li>
-    )
-  }
-}
- 
+  const [isOpenMenu, setIsOpenMenu] = useState(false);
+
+  const switchMenu = () => setIsOpenMenu((prevIsOpenMenu) => !prevIsOpenMenu);
+
+  const { comment, currency, date, time, total, id, transType, category } = transaction;
+
+  return (
+    <li>
+      <span>date</span>
+      <p> {date}</p>
+      <span> time</span>
+      <p> {time}</p>
+      <span>total</span>
+      <p>{total}</p>
+      <span>currency</span>
+      <p>{currency}</p>
+      <span>comment</span>
+      <p>{comment}</p>
+      <span>category</span>
+      <p> {category}</p>
+
+      <button onClick={switchMenu} type="button">
+        ...
+      </button>
+      {isOpenMenu && (
+        <div>
+          <button
+            type="button"
+            onClick={() => delTransaction({ id, transType })}
+          >
+            Delete
+          </button>
+          <button type="button" onClick={() => switchEditForm(transaction)}>
+            Edit
+          </button>
+        </div>
+      )}
+    </li>
+  )
+};
+
 export default TransactionListItem;
