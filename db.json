@@ -47,28 +47,48 @@
       "comment": "",
       "transType": "costs",
       "id": 3
+    },
+    {
+      "date": "2022-02-22",
+      "time": "15:24",
+      "category": "eat",
+      "currency": "UAH",
+      "comment": "test",
+      "total": "2000",
+      "transType": "costs",
+      "id": 4
     }
   ],
   "incomes": [
     {
-      "date": "",
+      "date": "2022-02-22",
       "time": "",
-      "category": "Еда",
-      "sum": "",
-      "curency": "UAH",
+      "category": "Salary",
+      "currency": "UAH",
       "comment": "",
+      "total": "",
       "transType": "incomes",
+      "id": 1
+    }
+  ],
+  "costsCat": [
+    {
+      "title": "dress",
       "id": 1
     },
     {
-      "date": "2022-02-22",
-      "time": "17:24",
-      "category": "Еда",
-      "sum": "1200",
-      "curency": "UAH",
-      "comment": "п",
-      "transType": "incomes",
+      "title": "Eat",
+      "id": 2
+    },
+    {
+      "title": "Drink",
       "id": 3
+    }
+  ],
+  "incomesCat": [
+    {
+      "title": "Salary",
+      "id": 1
     }
   ]
 }

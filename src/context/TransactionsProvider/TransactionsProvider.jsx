@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { getTransactions, removeTransactionApi } from "../../api";
+import { getTransactionsApi, removeTransactionApi } from "../../api"
 
 const TransactionsContext = createContext();
 export const useTransactionsContext = () => useContext(TransactionsContext);
@@ -33,14 +33,14 @@ transType === "incomes" &&
   setIncomes((prevIncomes) => prevIncomes.map((el)=>el.id===transaction.id?transaction:el ));
 }
 
-  useEffect(() => {
-    getTransactions("costs")
-      .then((costs) => setCosts(costs))
-      .catch((err) => console.log(err));
-    getTransactions("incomes")
-      .then((incomes) => setIncomes(incomes))
-      .catch((err) => console.log(err));
-  }, []);
+  // useEffect(() => {
+  //   getTransactionsApi("costs")
+  //     .then((costs) => setCosts(costs))
+  //     .catch((err) => console.log(err))
+  //   getTransactionsApi("incomes")
+  //     .then((incomes) => setIncomes(incomes))
+  //     .catch((err) => console.log(err))
+  // }, []);
 
 
 

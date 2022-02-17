@@ -20,7 +20,7 @@ export const editTransactionApi = ({ transType, transaction }) => {
     });
 };
 
-export const getTransactions = (transType) => {
+export const getTransactionsApi = (transType) => {
   return axios
     .get(baseUrl + transType)
     .then((res) => res.data)
@@ -35,3 +35,21 @@ export const removeTransactionApi = ({id, transType}) => {
     .then((res) => res.data)
     .catch((err) => {throw err});
 };
+
+export const postCategoryApi = ({ transType, category }) => {
+  return axios
+    .post(baseUrl + transType +"Cat", category)
+    .then((res) => res.data)
+    .catch((err) => {
+      throw err
+    })
+}
+
+export const getCategoryApi = (transType) => {
+  return axios
+    .get(baseUrl + transType + "Cat")
+    .then((res) => res.data)
+    .catch((err) => {
+      throw err
+    })
+}

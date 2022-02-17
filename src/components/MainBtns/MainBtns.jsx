@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 function MainBtns() {
   return (
     <>
-      <Link className="link" to={"/transactions/incomes"} type="button">
+      <Link className="link" to={"/transactions/incomes"}>
         Incomes
       </Link>
       <Link className="link" to={"/transactions/costs"}>
