@@ -5,8 +5,9 @@ import { useTransactionsContext } from "../../context/TransactionsProvider/Trans
 import { Route, Switch } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import { useRouteMatch } from "react-router-dom";
-import { connect } from "react-redux";
+import { useDispatch } from "react-redux";
 import { addCosts, addIncomes } from "../../redux/transactions/transactionsActions";
+
 
 const initialForm = {
   date: "2022-02-22",
@@ -17,21 +18,15 @@ const initialForm = {
   total: "",
 };
 
-const initialCategoriesList = [
-  { id: 1, title: "Eat" },
-  { id: 2, title: "Drink" },
-];
-
 const TransactionForm = ({
   editingTransaction,
   setIsEdit,
-  addCosts,
-  addIncomes,
 }) => {
+  const dispatch = useDispatch()
   const history = useHistory()
   const match = useRouteMatch()
-  // console.log(editingTransaction);
   const { editTransaction } = useTransactionsContext()
+  
   const [form, setForm] = useState(() =>
     editingTransaction ? editingTransaction : initialForm
   )
@@ -66,8 +61,8 @@ const TransactionForm = ({
         (data) => {
           // if (transType === "incomes") addIncomes(data);
           // if (transType === "costs") addCosts(data);
-          transType === "incomes" && addIncomes(data);
-          transType === "costs" && addCosts(data);
+          transType === "incomes" && dispatch(addIncomes(data))
+          transType === "costs" && dispatch(addCosts(data))
         }
       ).catch(err => console.log(err))
     }
@@ -172,9 +167,4 @@ const TransactionForm = ({
   )
 }
 
-const mapDispatchToProps = {
-  addIncomes,
-  addCosts,
-}
-
-export default connect(null, mapDispatchToProps)(TransactionForm) ;
+export default TransactionForm;

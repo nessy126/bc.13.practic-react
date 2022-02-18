@@ -50,27 +50,16 @@
     },
     {
       "date": "2022-02-22",
-      "time": "15:24",
-      "category": "eat",
+      "time": "15:08",
+      "category": "dress",
       "currency": "UAH",
-      "comment": "test",
-      "total": "2000",
+      "comment": "уч",
+      "total": "3000",
       "transType": "costs",
-      "id": 4
+      "id": 5
     }
   ],
-  "incomes": [
-    {
-      "date": "2022-02-22",
-      "time": "",
-      "category": "Salary",
-      "currency": "UAH",
-      "comment": "",
-      "total": "",
-      "transType": "incomes",
-      "id": 1
-    }
-  ],
+  "incomes": [],
   "costsCat": [
     {
       "title": "dress",

@@ -1,8 +1,9 @@
-import { connect } from "react-redux";
-import { useTransactionsContext } from "../../context/TransactionsProvider/TransactionsProvider";
+import { useSelector } from "react-redux";
 import TransactionListItem from "../TransactionListItem/TransactionListItem";
 
-const TransactionList = ({ transType, switchEditForm, transactions }) => {
+const TransactionList = ({ transType, switchEditForm }) => {
+  const transactions = useSelector((state) => state.transactions)
+
   return (
     <ul>
       {transactions[transType].map((transaction) => (
@@ -15,10 +16,5 @@ const TransactionList = ({ transType, switchEditForm, transactions }) => {
     </ul>
   )
 }
-const mapStateToProps = (state) => {
-  return {
-    transactions: state.transactions
-  }
-}
 
-export default connect(mapStateToProps)(TransactionList) ;
+export default TransactionList;

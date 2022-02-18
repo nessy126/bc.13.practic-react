@@ -1,18 +1,9 @@
-export const addCosts = (tronsaction) => ({
-  type: "transactions/addCosts",
-  payload: tronsaction,
-})
+import {createAction} from "@reduxjs/toolkit"
 
-export const addIncomes = (tronsaction) => ({
-  type: "transactions/addIncomes",
-  payload: tronsaction,
-})
+export const addCosts = createAction("transactions/addCosts")
+export const addIncomes = createAction("transactions/addIncomes")
+export const getCosts = createAction("transactions/getCosts")
+export const getIncomes = createAction("transactions/getIncomes")
+export const removeIncomes = createAction("transactions/removeIncomes")
+export const removeCosts = createAction("transactions/removeCosts")
 
-export const getCosts = (tronsactions) => ({
-  type: "transactions/getCosts",
-  payload: tronsactions,
-})
-export const getIncomes = (tronsactions) => ({
-  type: "transactions/getIncomes",
-  payload: tronsactions,
-})

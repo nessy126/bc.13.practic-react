@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { connect } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Route, Switch } from "react-router-dom";
 import { getTransactionsApi } from "./api";
 // import "./App.css";
@@ -7,15 +7,17 @@ import MainPage from "./components/MainPage/MainPage";
 import TransactionListPage from "./components/TransactionListPage/TransactionListPage";
 import {getIncomes, getCosts,} from "./redux/transactions/transactionsActions"
 
-const App = ({ getIncomes, getCosts }) => {
+const App = () => {
+  const dispatch = useDispatch()
+  
   useEffect(() => {
     getTransactionsApi("costs")
-      .then((costs) => getCosts(costs))
+      .then((costs) => dispatch(getCosts(costs)))
       .catch((err) => console.log(err))
     getTransactionsApi("incomes")
-      .then((incomes) => getIncomes(incomes))
+      .then((incomes) => dispatch(getIncomes(incomes)))
       .catch((err) => console.log(err))
-  }, [])
+  }, [dispatch])
 
   return (
     <div className="App">
@@ -31,9 +33,4 @@ const App = ({ getIncomes, getCosts }) => {
   )
 }
 
-const mapDispatchToProps = {
-  getIncomes,
-  getCosts,
-}
-
-export default connect(null, mapDispatchToProps) (App) ;
+export default App ;
