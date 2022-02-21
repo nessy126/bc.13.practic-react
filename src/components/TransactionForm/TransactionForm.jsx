@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { editTransactionApi, postTransaction } from "../../api";
+import { editTransactionApi, postTransactionApi } from "../../api";
 import CategoryList from "../CategoryList/CategoryList";
 import { useTransactionsContext } from "../../context/TransactionsProvider/TransactionsProvider";
 import { Route, Switch } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import { useRouteMatch } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { addCosts, addIncomes } from "../../redux/transactions/transactionsActions";
+import { addCosts, addIncomes } from "../../redux/transactions/transactionsOperations";
 
 
 const initialForm = {
@@ -57,10 +57,11 @@ const TransactionForm = ({
         setIsEdit(false)
       })
     } else {
-      postTransaction({ transType, transaction: { ...form, transType } }).then(
+      postTransactionApi({ transType, transaction: { ...form, transType } }).then(
         (data) => {
           // if (transType === "incomes") addIncomes(data);
           // if (transType === "costs") addCosts(data);
+          console.log(data);
           transType === "incomes" && dispatch(addIncomes(data))
           transType === "costs" && dispatch(addCosts(data))
         }
@@ -78,7 +79,7 @@ const TransactionForm = ({
 
   return (
     <Switch>
-      {console.log(match.path + "/categories-list")}
+      {/* {console.log(match.path + "/categories-list")} */}
       <Route path={match.path} exact>
         <select
           name="transType"

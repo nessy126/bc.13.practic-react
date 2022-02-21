@@ -1,11 +1,13 @@
 import axios from "axios";
 
-const baseUrl = "http://localhost:3004/";
+const baseUrl =
+  "https://wallet-bc-13-default-rtdb.europe-west1.firebasedatabase.app/"
 
-export const postTransaction = ({ transType, transaction }) => {
+export const postTransactionApi = ({ transType, transaction }) => {
   return axios
-    .post(baseUrl + transType, transaction)
-    .then((res) => res.data)
+    .post(baseUrl + "/transactions/"+ transType + ".json", transaction)
+    .then((res) => ({...transaction, id: res.data.name})
+    )
     .catch((err) => {
       throw err;
     });
@@ -22,7 +24,7 @@ export const editTransactionApi = ({ transType, transaction }) => {
 
 export const getTransactionsApi = (transType) => {
   return axios
-    .get(baseUrl + transType)
+    .get(baseUrl + "/transactions.json")
     .then((res) => res.data)
     .catch((err) => {
       throw err;
