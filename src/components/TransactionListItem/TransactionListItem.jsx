@@ -1,29 +1,16 @@
 import { useState } from "react"
-import { removeTransactionApi } from "../../api"
-import { useDispatch } from "react-redux"
-import {
-  removeIncomes,
-  removeCosts,
-} from "../../redux/transactions/transactionsActions"
+import { useDispatch, useSelector } from "react-redux"
+import { getIsLoading } from "../../redux/transactions/transactionSelector"
+import { removeTransactions } from "../../redux/transactions/transactionsOperations"
 
-const TransactionListItem = ({ transaction, switchEditForm }) => {
+const TransactionListItem = ({ transaction, switchEditForm, transType }) => {
   const dispatch = useDispatch()
-  
+  const isLoading = useSelector(getIsLoading)
   const [isOpenMenu, setIsOpenMenu] = useState(false)
-
-  const delTransaction = ({ id, transType }) => {
-    removeTransactionApi({ id, transType })
-      .then((res) => {
-        transType === "incomes" && dispatch(removeIncomes(id))
-        transType === "costs" && dispatch(removeCosts(id))
-      })
-      .catch((err) => console.log(err))
-  }
-
 
   const switchMenu = () => setIsOpenMenu((prevIsOpenMenu) => !prevIsOpenMenu)
 
-  const { comment, currency, date, time, total, id, transType, category } =
+  const { comment, currency, date, time, total, id, category } =
     transaction
 
   return (
@@ -48,7 +35,8 @@ const TransactionListItem = ({ transaction, switchEditForm }) => {
         <div>
           <button
             type="button"
-            onClick={() => delTransaction({ id, transType })}
+            onClick={() => dispatch(removeTransactions({ id, transType }))}
+            disabled={isLoading}
           >
             Delete
           </button>

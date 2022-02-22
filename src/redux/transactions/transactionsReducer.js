@@ -1,19 +1,39 @@
 import { createReducer, combineReducers } from "@reduxjs/toolkit";
 import { removeIncomes, removeCosts } from "./transactionsActions";
-import { addCosts, addIncomes, getTransactions } from "./transactionsOperations"
+import {
+  addCosts,
+  addIncomes,
+  editTransaction,
+  getTransactions,
+  removeTransactions,
+} from "./transactionsOperations"
 
 const costsReducer = createReducer([], {
   [addCosts.fulfilled]: (state, { payload }) => [...state, payload],
   [getTransactions.fulfilled]: (_, { payload: { costs } }) => costs,
-  [removeCosts]: (state, { payload }) =>
-    state.filter((el) => el.id !== payload),
+  [removeTransactions.fulfilled]: (state, { payload }) => {
+    const { id, transType } = payload;
+  return transType === "costs" ? state.filter((el) => el.id !== id) : state
+  },
+  [editTransaction.fulfilled]: (state, { payload }) => {
+    const {transType, transaction} = payload;
+    return  transType === "costs" ? state.map(el => el.id === transaction.id ? transaction : el) : state
+  }
+    
 })
 
 const incomesReducer = createReducer([], {
   [addIncomes.fulfilled]: (state, { payload }) => [...state, payload],
   [getTransactions.fulfilled]: (_, { payload: { incomes } }) => incomes,
-  [removeIncomes]: (state, { payload }) =>
-    state.filter((el) => el.id !== payload),
+  [removeTransactions.fulfilled]: (state, { payload }) => {
+    const { id, transType } = payload;
+    return transType === "incomes" ? state.filter((el) => el.id !== id) : state;
+  },
+  [editTransaction.fulfilled]: (state, { payload }) => {
+    const {transType, transaction} = payload;
+    return transType === "incomes" ? state.map(el => el.id === transaction.id ? transaction : el) : state
+  }
+    
 })
 
 const isLoadingReducer = createReducer(false, {
@@ -26,6 +46,9 @@ const isLoadingReducer = createReducer(false, {
   [getTransactions.pending]: () => true,
   [getTransactions.fulfilled]: () => false,
   [getTransactions.rejected]: () => false,
+  [removeTransactions.pending]: () => true,
+  [removeTransactions.fulfilled]: () => false,
+  [removeTransactions.rejected]: () => false,
 })
 
 export const transactionsReducer = combineReducers({

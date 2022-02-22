@@ -1,12 +1,14 @@
 import { useState } from "react";
-import { editTransactionApi, postTransactionApi } from "../../api";
 import CategoryList from "../CategoryList/CategoryList";
-import { useTransactionsContext } from "../../context/TransactionsProvider/TransactionsProvider";
 import { Route, Switch } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import { useRouteMatch } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { addCosts, addIncomes } from "../../redux/transactions/transactionsOperations";
+import {
+  addCosts,
+  addIncomes,
+  editTransaction,
+} from "../../redux/transactions/transactionsOperations"
 
 
 const initialForm = {
@@ -18,15 +20,11 @@ const initialForm = {
   total: "",
 };
 
-const TransactionForm = ({
-  editingTransaction,
-  setIsEdit,
-}) => {
+const TransactionForm = ({ setIsEdit, editingTransaction }) => {
   const dispatch = useDispatch()
   const history = useHistory()
   const match = useRouteMatch()
-  const { editTransaction } = useTransactionsContext()
-  
+
   const [form, setForm] = useState(() =>
     editingTransaction ? editingTransaction : initialForm
   )
@@ -51,21 +49,11 @@ const TransactionForm = ({
   const handleSubmitTrans = (e) => {
     e.preventDefault()
     if (editingTransaction) {
-      console.log(editingTransaction)
-      editTransactionApi({ transType, transaction: form }).then((res) => {
-        editTransaction(res)
-        setIsEdit(false)
-      })
+      dispatch(editTransaction({ transaction: form, transType }))
+      setIsEdit(false)
     } else {
-      postTransactionApi({ transType, transaction: { ...form, transType } }).then(
-        (data) => {
-          // if (transType === "incomes") addIncomes(data);
-          // if (transType === "costs") addCosts(data);
-          console.log(data);
-          transType === "incomes" && dispatch(addIncomes(data))
-          transType === "costs" && dispatch(addCosts(data))
-        }
-      ).catch(err => console.log(err))
+      transType === "incomes" && dispatch(addIncomes(form))
+      transType === "costs" && dispatch(addCosts(form))
     }
     setForm(initialForm)
   }
@@ -79,8 +67,7 @@ const TransactionForm = ({
 
   return (
     <Switch>
-      {/* {console.log(match.path + "/categories-list")} */}
-      <Route path={match.path} exact>
+       <Route path={match.path} exact>
         <select
           name="transType"
           onChange={handleChangeTransType}

@@ -11,6 +11,7 @@ const TransactionList = ({ transType, switchEditForm }) => {
           transaction={transaction}
           key={transaction.id}
           switchEditForm={switchEditForm}
+          transType={transType}
         />
       ))}
     </ul>

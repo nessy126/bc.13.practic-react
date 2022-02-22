@@ -1,5 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit" 
-import { getTransactionsApi, postTransactionApi } from "../../api"
+import {
+  editTransactionApi,
+  getTransactionsApi,
+  postTransactionApi,
+  removeTransactionApi,
+} from "../../api"
 
 const transformGetTransactions = (data) => Object.entries(data)
   .map(([id, transaction]) => ({ ...transaction, id }))
@@ -53,3 +58,26 @@ export const getTransactions = createAsyncThunk(
     }
   }
 ) 
+export const removeTransactions = createAsyncThunk(
+  "transaction/removeTransaction",
+  async ({ id, transType }, thunckApi) => {
+    try {
+      await removeTransactionApi({ id, transType })
+      return { id, transType }
+    } catch (err) {
+      return thunckApi.rejectWithValue(err.message)
+    }
+  }
+) 
+
+export const editTransaction = createAsyncThunk(
+  "transaction/editTransaction",
+  async ({ transType, transaction}, thunckApi) => {
+    try {
+      const editedTransaction = await editTransactionApi({ transType, transaction })
+      return { transaction: editedTransaction, transType }
+    } catch (err) {
+      thunckApi.rejectWithValue(err.message)
+    }
+  }
+)

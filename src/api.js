@@ -12,15 +12,19 @@ export const postTransactionApi = ({ transType, transaction }) => {
       throw err;
     });
 };
-
+// /transactions/costs/-MwWNMUoamo7o08e0LqW.json
 export const editTransactionApi = ({ transType, transaction }) => {
+   console.log(transaction)
   return axios
-    .patch(baseUrl + transType +"/"+transaction.id, transaction)
-    .then((res) => res.data)
+    .put(
+      baseUrl + "transactions/" + transType + "/" + transaction.id + ".json",
+      transaction
+    )
+    .then((res) => ({ ...res.data, id: transaction.id }))
     .catch((err) => {
-      throw err;
-    });
-};
+      throw err
+    })
+}
 
 export const getTransactionsApi = (transType) => {
   return axios
@@ -31,12 +35,14 @@ export const getTransactionsApi = (transType) => {
     });
 };
 
-export const removeTransactionApi = ({id, transType}) => {
+export const removeTransactionApi = ({ id, transType }) => {
   return axios
-    .delete(baseUrl + transType + "/" + id)
+    .delete(baseUrl + "/transactions/" + transType + "/" + id + ".json") 
     .then((res) => res.data)
-    .catch((err) => {throw err});
-};
+    .catch((err) => {
+      throw err
+    })
+}
 
 export const postCategoryApi = ({ transType, category }) => {
   return axios
