@@ -1,15 +1,17 @@
-import { useState } from "react";
-import CategoryList from "../CategoryList/CategoryList";
-import { Route, Switch } from "react-router-dom";
-import { useHistory } from "react-router-dom";
-import { useRouteMatch } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useState } from "react"
+import CategoryList from "../CategoryList/CategoryList"
+import { Route, Switch } from "react-router-dom"
+import { useHistory } from "react-router-dom"
+import { useRouteMatch } from "react-router-dom"
+import { useDispatch } from "react-redux"
 import {
   addCosts,
   addIncomes,
   editTransaction,
 } from "../../redux/transactions/transactionsOperations"
-
+import { Col, FormControl, InputGroup, Row, Button } from "react-bootstrap"
+import SelectTransType from "../SelectTransType/SelectTransType"
+import { FormStyled } from "./TransactionForm.styled"
 
 const initialForm = {
   date: "2022-02-22",
@@ -18,7 +20,7 @@ const initialForm = {
   currency: "UAH",
   comment: "",
   total: "",
-};
+}
 
 const TransactionForm = ({ setIsEdit, editingTransaction }) => {
   const dispatch = useDispatch()
@@ -67,80 +69,77 @@ const TransactionForm = ({ setIsEdit, editingTransaction }) => {
 
   return (
     <Switch>
-       <Route path={match.path} exact>
-        <select
-          name="transType"
-          onChange={handleChangeTransType}
-          value={transType}
-        >
-          <option value="incomes">Incomes</option>
-          <option value="costs">Costs</option>
-        </select>
-        <form onSubmit={handleSubmitTrans}>
-          <label>
-            Day
-            <input
+      <Route path={match.path} exact>
+        <SelectTransType
+          handleChangeTransType={handleChangeTransType}
+          transType={transType}
+        />
+        <FormStyled handleSubmitTrans={handleSubmitTrans}>
+          <InputGroup className="mb-3">
+            <InputGroup.Text>Day</InputGroup.Text>
+            <FormControl
               name="date"
               type="date"
               value={date}
               onChange={handleChangeForm}
             />
-          </label>
-
-          <label>
-            Time
-            <input
+          </InputGroup>
+          <InputGroup className="mb-3">
+            <InputGroup.Text>Time</InputGroup.Text>
+            <FormControl
               name="time"
               type="time"
               value={time}
               onChange={handleChangeForm}
             />
-          </label>
+          </InputGroup>
 
-          <label>
-            Category
-            <input
+          <InputGroup className="mb-3">
+            <InputGroup.Text>Category</InputGroup.Text>
+            <FormControl
               name="category"
               type="button"
               value={category}
               onClick={openCategoryList}
             />
-          </label>
+          </InputGroup>
 
-          <label>
-            Total
-            <input
+          <InputGroup className="mb-3">
+            <InputGroup.Text>Total</InputGroup.Text>
+            <FormControl
               name="total"
               type="text"
               placeholder="Enter sum"
               value={total}
               onChange={handleChangeForm}
             />
-          </label>
-
-          <label>
-            Currency
-            <input
+          </InputGroup>
+          <InputGroup className="mb-3">
+            <InputGroup.Text>Currency</InputGroup.Text>
+            <FormControl
               name="currency"
               type="button"
               value={currency}
               onClick={null}
             />
-          </label>
+          </InputGroup>
 
-          <label>
-            <input
+          <InputGroup className="mb-3">
+            <FormControl
               name="comment"
               type="text"
               placeholder="Comment"
               value={comment}
               onChange={handleChangeForm}
             />
-          </label>
-          <button className="submit" type="submit">
-            Submit
-          </button>
-        </form>
+          </InputGroup>
+          <Button
+            className="mx-auto d-block"
+            as="input"
+            type="submit"
+            value="Submit"
+          />
+        </FormStyled>
       </Route>
       <Route
         path={
@@ -155,4 +154,4 @@ const TransactionForm = ({ setIsEdit, editingTransaction }) => {
   )
 }
 
-export default TransactionForm;
+export default TransactionForm
