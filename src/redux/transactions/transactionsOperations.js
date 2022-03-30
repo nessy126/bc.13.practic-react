@@ -1,50 +1,49 @@
-import { createAsyncThunk } from "@reduxjs/toolkit" 
+import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
   editTransactionApi,
   getTransactionsApi,
-  postTransactionApi,
+  postTransaction,
   removeTransactionApi,
-} from "../../api"
+} from "../../api";
 
-const transformGetTransactions = (data) => Object.entries(data)
-  .map(([id, transaction]) => ({ ...transaction, id }))
+const transformGetTransactions = (data) =>
+  Object.entries(data).map(([id, transaction]) => ({ ...transaction, id }));
 
 export const addCosts = createAsyncThunk(
   "transaction/addCosts",
-  async (transaction, thunckApi) => {
+  async (transaction, thunkApi) => {
     try {
-      const newTransaction = await postTransactionApi({
+      const newTransaction = await postTransaction({
         transType: "costs",
         transaction,
-      })
-      return newTransaction
+      });
+      return newTransaction;
     } catch (err) {
-      return thunckApi.rejectWithValue(err.message)
+      return thunkApi.rejectWithValue(err.message);
     }
   }
-) 
+);
 
 export const addIncomes = createAsyncThunk(
   "transaction/addIncomes",
-  async (transaction, thunckApi) => {
+  async (transaction, thunkApi) => {
     try {
-      const newTransaction = await postTransactionApi({
+      const newTransaction = await postTransaction({
         transType: "incomes",
         transaction,
-      })
-      return newTransaction
+      });
+      return newTransaction;
     } catch (err) {
-      return thunckApi.rejectWithValue(err.message)
+      return thunkApi.rejectWithValue(err.message);
     }
   }
-) 
+);
 
 export const getTransactions = createAsyncThunk(
-  "transaction/getTransaction",
-  async (_, thunckApi) => {
+  "transaction/getTransactions",
+  async (_, thunkApi) => {
     try {
-      const transactions = await getTransactionsApi()
-      console.log(transactions)
+      const transactions = await getTransactionsApi();      
       return {
         costs: transactions?.costs
           ? transformGetTransactions(transactions.costs)
@@ -52,32 +51,36 @@ export const getTransactions = createAsyncThunk(
         incomes: transactions?.incomes
           ? transformGetTransactions(transactions.incomes)
           : [],
-      }
+      };
     } catch (err) {
-      return thunckApi.rejectWithValue(err.message)
+      return thunkApi.rejectWithValue(err.message);
     }
   }
-) 
-export const removeTransactions = createAsyncThunk(
+);
+
+export const removeTransaction = createAsyncThunk(
   "transaction/removeTransaction",
-  async ({ id, transType }, thunckApi) => {
+  async ({ transType, id }, thunkApi) => {
     try {
-      await removeTransactionApi({ id, transType })
-      return { id, transType }
+      await removeTransactionApi({ transType, id });
+      return { transType, id };
     } catch (err) {
-      return thunckApi.rejectWithValue(err.message)
+      return thunkApi.rejectWithValue(err.message);
     }
   }
-) 
+);
 
 export const editTransaction = createAsyncThunk(
   "transaction/editTransaction",
-  async ({ transType, transaction}, thunckApi) => {
+  async ({ transType, transaction }, thunkApi) => {
     try {
-      const editedTransaction = await editTransactionApi({ transType, transaction })
-      return { transaction: editedTransaction, transType }
+      const editedTransaction = await editTransactionApi({
+        transType,
+        transaction,
+      });
+      return {transType, transaction: editedTransaction};
     } catch (err) {
-      thunckApi.rejectWithValue(err.message)
+      return thunkApi.rejectWithValue(err.message);
     }
   }
-)
+);

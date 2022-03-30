@@ -1,8 +1,8 @@
 import { Form } from "react-bootstrap";
 import styled from "styled-components";
 
-export const SelectTranstypeStyled=styled(Form.Select)`
-width: 130px;
+export const FormStyled=styled(Form)`
 margin: 0 auto;
-margin-bottom: 20px;
+border: 2px solid #ccc;
+padding: 10px;
 `

@@ -2,7 +2,8 @@ import { useSelector } from "react-redux";
 import TransactionListItem from "../TransactionListItem/TransactionListItem";
 
 const TransactionList = ({ transType, switchEditForm }) => {
-  const transactions = useSelector((state) => state.transactions)
+  const transactions = useSelector((state) => state.transactions);
+  // const transactions = transactionsProps[transType];
 
   return (
     <ul>
@@ -11,11 +12,18 @@ const TransactionList = ({ transType, switchEditForm }) => {
           transaction={transaction}
           key={transaction.id}
           switchEditForm={switchEditForm}
-          transType={transType}
         />
       ))}
     </ul>
-  )
-}
+  );
+};
+
+// const mapStateToProps = (state) => {
+//   return {
+//     transactionsProps: state.transactions,
+//   };
+// };
 
 export default TransactionList;
+
+// const mapDispatchToProps = {}

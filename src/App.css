@@ -93,6 +93,7 @@ h1,
 .link {
   text-decoration: none;
   min-width: 120px;
+  min-height: 20px;
   background-color: #fff;
   cursor: pointer;
   text-align: center;
@@ -114,12 +115,15 @@ h1{
 
 ul{
   list-style: none;
-  padding: 10px;
-  border: 2px solid orange;
-  width: 250px;
+  width: 270px;
   margin: 0 auto;
+  padding: 5px;
+  background-color: #fdefd6;
 }
 li{
   display: block;
   margin: 0 auto;
+  border: 2px solid orange;
+  padding: 7px;
+  margin-bottom: 5px;
 }

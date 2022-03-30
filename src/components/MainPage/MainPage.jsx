@@ -8,8 +8,7 @@ const MainPage = () => {
   return (
     <>
       <TransactionForm />
-      {isExact &&
-        <MainBtns />}
+      {isExact && <MainBtns />}
     </>
   );
 };

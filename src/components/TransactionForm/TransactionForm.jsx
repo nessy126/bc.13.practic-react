@@ -1,17 +1,20 @@
-import { useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import CategoryList from "../CategoryList/CategoryList"
 import { Route, Switch } from "react-router-dom"
 import { useHistory } from "react-router-dom"
 import { useRouteMatch } from "react-router-dom"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import {
   addCosts,
   addIncomes,
   editTransaction,
 } from "../../redux/transactions/transactionsOperations"
-import { Col, FormControl, InputGroup, Row, Button } from "react-bootstrap"
-import SelectTransType from "../SelectTransType/SelectTransType"
-import { FormStyled } from "./TransactionForm.styled"
+
+import SelectTranstype from "../SelectTransType/SelectTranstype"
+import { transactionFormOptions } from "../../assets/options/transactionFormOptions"
+import Form from "../Form/Form"
+import { getTransactions } from "../../redux/transactions/transactionSelectors"
+import { changeInput, setInitialState } from "../../redux/form/formSlice"
 
 const initialForm = {
   date: "2022-02-22",
@@ -22,20 +25,18 @@ const initialForm = {
   total: "",
 }
 
-const TransactionForm = ({ setIsEdit, editingTransaction }) => {
+const TransactionForm = ({
+  togleCategoryList,
+  editingTransaction,
+  setIsEdit,
+}) => {
   const dispatch = useDispatch()
   const history = useHistory()
   const match = useRouteMatch()
 
-  const [form, setForm] = useState(() =>
-    editingTransaction ? editingTransaction : initialForm
-  )
+  const transactions = useSelector(getTransactions)
   const [transType, setTransType] = useState("costs")
-
-  const handleChangeForm = (e) => {
-    const { name, value } = e.target
-    setForm((prev) => ({ ...prev, [name]: value }))
-  }
+  const curTransactions = transactions[transType]
 
   const openCategoryList = () => {
     history.push(
@@ -48,99 +49,48 @@ const TransactionForm = ({ setIsEdit, editingTransaction }) => {
     setTransType(value)
   }
 
-  const handleSubmitTrans = (e) => {
-    e.preventDefault()
+  const handleSubmitTrans = (form) => {
     if (editingTransaction) {
-      dispatch(editTransaction({ transaction: form, transType }))
+      dispatch(editTransaction({ transType, transaction: form }))
       setIsEdit(false)
     } else {
-      transType === "incomes" && dispatch(addIncomes(form))
       transType === "costs" && dispatch(addCosts(form))
+      transType === "incomes" && dispatch(addIncomes(form))
     }
-    setForm(initialForm)
+    // setForm(initialForm);
   }
 
   const setCategory = (newCategory) => {
-    setForm((prevForm) => ({ ...prevForm, category: newCategory }))
+    dispatch(changeInput({ name: "category", value: newCategory }))
+    // setForm((prevForm) => ({ ...prevForm, category: newCategory }));
     history.goBack()
   }
 
-  const { date, time, category, total, currency, comment } = form
+  const initialFormValue = useMemo(
+    () => (editingTransaction ? editingTransaction : initialForm),
+    [editingTransaction]
+  )
+
+  useEffect(() => {
+    dispatch(setInitialState(initialFormValue))
+  }, [dispatch, initialFormValue, curTransactions])
 
   return (
     <Switch>
       <Route path={match.path} exact>
-        <SelectTransType
+        <SelectTranstype
           handleChangeTransType={handleChangeTransType}
           transType={transType}
         />
-        <FormStyled handleSubmitTrans={handleSubmitTrans}>
-          <InputGroup className="mb-3">
-            <InputGroup.Text>Day</InputGroup.Text>
-            <FormControl
-              name="date"
-              type="date"
-              value={date}
-              onChange={handleChangeForm}
-            />
-          </InputGroup>
-          <InputGroup className="mb-3">
-            <InputGroup.Text>Time</InputGroup.Text>
-            <FormControl
-              name="time"
-              type="time"
-              value={time}
-              onChange={handleChangeForm}
-            />
-          </InputGroup>
 
-          <InputGroup className="mb-3">
-            <InputGroup.Text>Category</InputGroup.Text>
-            <FormControl
-              name="category"
-              type="button"
-              value={category}
-              onClick={openCategoryList}
-            />
-          </InputGroup>
-
-          <InputGroup className="mb-3">
-            <InputGroup.Text>Total</InputGroup.Text>
-            <FormControl
-              name="total"
-              type="text"
-              placeholder="Enter sum"
-              value={total}
-              onChange={handleChangeForm}
-            />
-          </InputGroup>
-          <InputGroup className="mb-3">
-            <InputGroup.Text>Currency</InputGroup.Text>
-            <FormControl
-              name="currency"
-              type="button"
-              value={currency}
-              onClick={null}
-            />
-          </InputGroup>
-
-          <InputGroup className="mb-3">
-            <FormControl
-              name="comment"
-              type="text"
-              placeholder="Comment"
-              value={comment}
-              onChange={handleChangeForm}
-            />
-          </InputGroup>
-          <Button
-            className="mx-auto d-block"
-            as="input"
-            type="submit"
-            value="Submit"
-          />
-        </FormStyled>
+        <Form
+          options={transactionFormOptions}
+          cbOnSubmit={handleSubmitTrans}
+          initialFormValue={initialFormValue}
+          cbOnClick={openCategoryList}
+        />
       </Route>
+
       <Route
         path={
           match.path === "/"
@@ -148,10 +98,18 @@ const TransactionForm = ({ setIsEdit, editingTransaction }) => {
             : match.path + "/categories-list"
         }
       >
-        <CategoryList setCategory={setCategory} transType={transType} />
+        <CategoryList
+          transType={transType}
+          togleCategoryList={togleCategoryList}
+          setCategory={setCategory}
+        />
       </Route>
     </Switch>
   )
 }
+// const mapDispatchToProps = {
+//   addIncomesProps: addIncomes,
+//   addCostsProps: addCosts,
+// };
 
 export default TransactionForm

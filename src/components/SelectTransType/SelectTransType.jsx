@@ -1,19 +1,17 @@
-import { SelectTranstypeStyled } from "./SelectTransType.styled";
+import { SelectTranstypeStyled } from "./SelectTranstype.styled";
 
-const SelectTransType = ({handleChangeTransType, transType}) => {
+const SelectTranstype = ({handleChangeTransType,transType}) => {
   return (
-    <>
-      <SelectTranstypeStyled
-        // sm={3}
-  name="transType"
-  onChange={handleChangeTransType}
-        value={transType}
-      >
-        <option value="incomes">Incomes</option>
-        <option value="costs">Costs</option>
-      </SelectTranstypeStyled>
-    </>
-  )
-}
- 
-export default SelectTransType;
+    <SelectTranstypeStyled
+      // htmlSize={2}
+      name="transType"
+      onChange={handleChangeTransType}
+      value={transType}
+    >
+      <option value="incomes">Incomes</option>
+      <option value="costs">Costs</option>
+    </SelectTranstypeStyled>
+  );
+};
+
+export default SelectTranstype;

@@ -13,10 +13,10 @@ const CategoryProvider = ({ children }) => {
     transType === "costs" && setCostsCat((prev) => [...prev, newCategory]).catch(err => console.log(err))
   }
 
-  useEffect(() => {
-    getCategoryApi("incomes").then((data) => setIncomesCat(data))
-    getCategoryApi("costs").then((data) => setCostsCat(data))
-  }, [])
+  // useEffect(() => {
+  //   // getCategoryApi("incomes").then((data) => setIncomesCat(data))
+  //   // getCategoryApi("costs").then((data) => setCostsCat(data))
+  // }, [])
 
   return (
     <CategoryContext.Provider value={{ incomesCat, costsCat, addCategory }}>

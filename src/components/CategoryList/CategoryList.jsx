@@ -1,29 +1,28 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { postCategoryApi } from "../../api"
-import { useCategoryContext } from "../../context/CategoryProvider/CategoryProvider"
+import { postCategory } from "../../api";
+import { useCategoriesContext } from "../../context/CategoriesProvider";
 
-
-const CategoryList = ({
-  setCategory,
-  transType,
-}) => {
-  const [inputCategory, setInputCategory] = useState("")
-  const { [transType + "Cat"]: categoriesList, addCategory } =
-    useCategoryContext()
+const CategoryList = ({ setCategory, transType }) => {
+  const [inputCategory, setInputCategory] = useState("");
+  const { [transType+"Cat"]:categoriesList, incomesCat, costsCat, addCategory } = useCategoriesContext();
 
   const handleInputChange = (e) => {
-    const { value } = e.target
-    setInputCategory(value)
-  }
+    const { value } = e.target;
+    setInputCategory(value);
+  };
 
   const handleSubmitNewCategory = (e) => {
-    e.preventDefault()
-    postCategoryApi({ transType, category: { title: inputCategory } }).then(
-      (data) => addCategory({transType, newCategory: data})
-    )
-    setInputCategory("")
-  }
+    e.preventDefault();
+    postCategory({ transType, category: { title: inputCategory } }).then(
+      (data) =>
+        addCategory({ transType, newCategory: data }).catch((err) =>
+          console.log(err)
+        )
+    );
+    // addCategory({title: inputCategory });
+    setInputCategory("");
+  };
 
   return (
     <>
@@ -52,8 +51,7 @@ const CategoryList = ({
         <button type="submit">+</button>
       </form>
     </>
-  )
-}
-
+  );
+};
 
 export default CategoryList;

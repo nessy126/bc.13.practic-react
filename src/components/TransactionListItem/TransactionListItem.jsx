@@ -1,17 +1,30 @@
-import { useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
-import { getIsLoading } from "../../redux/transactions/transactionSelector"
-import { removeTransactions } from "../../redux/transactions/transactionsOperations"
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { removeTransactionApi } from "../../api";
+import {
+  removeCosts,
+  removeIncomes,
+} from "../../redux/transactions/transactionsActions";
+import { getIsLoading } from "../../redux/transactions/transactionSelectors";
 
 const TransactionListItem = ({ transaction, switchEditForm, transType }) => {
-  const dispatch = useDispatch()
-  const isLoading = useSelector(getIsLoading)
-  const [isOpenMenu, setIsOpenMenu] = useState(false)
+  const dispatch = useDispatch();
+  const isLoading=useSelector(getIsLoading)
 
-  const switchMenu = () => setIsOpenMenu((prevIsOpenMenu) => !prevIsOpenMenu)
+  const delTransaction = ({ id, transType }) => {
+    removeTransactionApi({ id, transType }).then(() => {
+      transType === "incomes" && dispatch(removeIncomes(id));
+      transType === "costs" && dispatch(removeCosts(id));
+    });
+  };
+
+  const [isOpenMenu, setIsOpenMenu] = useState(false);
+
+  const switchMenu = () => setIsOpenMenu((prevIsOpenMenu) => !prevIsOpenMenu);
 
   const { comment, currency, date, time, total, id, category } =
-    transaction
+    transaction;
 
   return (
     <li>
@@ -21,12 +34,12 @@ const TransactionListItem = ({ transaction, switchEditForm, transType }) => {
       <p> {time}</p>
       <span>total</span>
       <p>{total}</p>
+      <span>category</span>
+      <p>{category}</p>
       <span>currency</span>
       <p>{currency}</p>
       <span>comment</span>
       <p>{comment}</p>
-      <span>category</span>
-      <p> {category}</p>
 
       <button onClick={switchMenu} type="button">
         ...
@@ -35,8 +48,8 @@ const TransactionListItem = ({ transaction, switchEditForm, transType }) => {
         <div>
           <button
             type="button"
-            onClick={() => dispatch(removeTransactions({ id, transType }))}
-            disabled={isLoading}
+            disable={isLoading}
+            onClick={() => delTransaction({ id, transType })}
           >
             Delete
           </button>
@@ -46,7 +59,7 @@ const TransactionListItem = ({ transaction, switchEditForm, transType }) => {
         </div>
       )}
     </li>
-  )
-}
+  );
+};
 
-export default TransactionListItem
+export default TransactionListItem;
