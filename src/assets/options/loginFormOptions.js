@@ -10,5 +10,5 @@ export const loginFormOptions = [
     name: "password",
     type: "text",
     placeholder: "Enter your password",
-  }
+  },
 ]
